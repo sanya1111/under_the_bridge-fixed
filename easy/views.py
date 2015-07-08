@@ -1,24 +1,56 @@
-# from django.shortcuts import render, get_object_or_404
-from jinja2 import Environment, PackageLoader
-# Create your views here.
-from django.http import HttpResponse
-from django.template import RequestContext, loader
-from django.shortcuts import render, get_object_or_404
-from .models import Question
+from django.http import HttpResponse, HttpResponseForbidden
+from .ext.jin2 import JinContext
+import os
+import json
+from .ext import vk 
+from django.template.context_processors import request
+import http
+from django.http.response import Http404
 
-def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'index.html', context)
+jc = JinContext("easy", "templates")
+jc.put_to_globals("static", "/static/easy/")
     
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'detail.html', {'question': question})
+def session_update(request, current_page):
+    def refresh():
+        jc.put_to_globals("login", None)
+        jc.put_to_globals("first_name", None)
+        jc.put_to_globals("last_name", None)
+        if vk.is_login(request):
+            try:
+                obj = vk.get_label(request)
+                jc.put_to_globals("login", "1")
+                jc.put_to_globals("first_name", obj["first_name"])
+                jc.put_to_globals("last_name", obj["last_name"])
+                print("VK LABEL ", obj)
+            except Exception as arg:
+                print(arg.args)
+                vk.exit(request)             
+    def code():    
+        try:
+            vk.login(request, current_page)
+            refresh()
+            print("SUCCESS LOGIN TO VK ", request.session["acc_token"], request.session["id"])
+        except Exception as arg:
+            print(arg.args)
+                    
+    def exit():
+        vk.exit(request)
+        refresh()
+    
+    if "code" in request.GET:
+        code()
+    if "refresh" in request.GET:
+        refresh()
+    if "exit" in request.GET:
+        exit()
+        
+def index_page(request):     
+    session_update(request, '')
+    return HttpResponse(jc.env.get_template('index.html').render())
 
-def results(request, question_id):
-    response = "You're looking at the results of question %s."
-    return HttpResponse(response % question_id)
-
-def vote(request, question_id):
-    return HttpResponse("You're voting on question %s." % question_id)
+def self_adverts(request):
+    session_update(request, 'self_adverts')
+    if not vk.is_login(request):
+        return HttpResponseForbidden('<h1>You havent login to see this page</h1>')
+    return HttpResponse(jc.env.get_template('self_adverts.html').render())
 
