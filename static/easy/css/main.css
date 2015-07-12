@@ -134,6 +134,8 @@ footer .socialIcons a.twitter{background:url("img/small-twitter.png") no-repeat;
 .button i.more{background-image:url("img/more.png");}
 .button i.email{background-image:url("img/mail.png"); margin-top:-8px;}
 
+
+
 /*******************************************************************************************************************
 *  Responsive design                                                                                                    
 *******************************************************************************************************************/
@@ -177,4 +179,45 @@ footer .socialIcons a.twitter{background:url("img/small-twitter.png") no-repeat;
 /* iPhone4 */
 @media only screen and (-webkit-min-device-pixel-ratio: 2) { 
 	html{width:100%;}
+}
+
+/* SELF */
+
+.round_img {
+    border-radius: 100px; /* Радиус скругления */
+    border: 3px solid green; /* Параметры рамки */
+    box-shadow: 0 0 7px #666; /* Параметры тени */
+    width:300px;
+    height:200px;
+    vertical-align: center;
+    position: relative;
+ }
+ 
+.text_center{
+	text-align: center;
+}
+
+#overlay_wrap{
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+#overlay{
+	background-color : black;
+    z-index: 5000;
+}
+
+.slider_ov{
+	display: block;
+	width: 60%;
+  	height: 70%;
+  	overflow: auto;
+  	margin: auto;
+  	position: absolute;
+  	opacity: 1.0;
+  	top: 0; left: 0; bottom: 0; right: 0;
+  	z-index: 6000;
+}
 }
