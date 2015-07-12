@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from .ext.jin2 import JinContext
 import os
 import json
@@ -54,3 +54,15 @@ def self_adverts(request):
         return HttpResponseForbidden('<h1>You havent login to see this page</h1>')
     return HttpResponse(jc.env.get_template('self_adverts.html').render())
 
+def self_adverts_ajax(request):
+    if not "next" in request.GET:
+        return HttpResponseNotFound("bad request")
+    next = request.GET["next"]
+    id = None
+    if vk.is_login(request):
+        id = request.session["id"]
+    if "id" in request.GET:
+        id = request.GET["id"]
+    if next == "1":
+        return HttpResponse('{"src":"/static/easy/images/test.jpg"}')
+    return HttpResponse('{"src":"/static/easy/images/nig.png"}')

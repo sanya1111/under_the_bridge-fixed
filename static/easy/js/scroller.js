@@ -2,14 +2,16 @@ $(document).ready(function(){
   var current_page = 0;
   function scroll_up(){
    //  alert("UP")
+    current_page = 1 - current_page
     $.ajax({
-    url: "/bitch",
-    data : "json",
+    url: "/ajax/?next=" + current_page.toString(),
+    dataType : "json",  
     error:function(data){
       alert("ERR")
     },
     success: function(data){
-      alert( typeof data );
+      $(".round_img").attr('src', data["src"]);
+      console.log(data["src"])
     }
    });
     //  $.get("/", function(data) {
