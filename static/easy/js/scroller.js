@@ -1,28 +1,42 @@
 $(document).ready(function(){
   var current_page = 0;
-  function scroll_up(){
-   //  alert("UP")
-    current_page = 1 - current_page
+  function next(page){
     $.ajax({
-    url: "/ajax/?next=" + current_page.toString(),
-    dataType : "json",  
-    error:function(data){
-      alert("ERR")
-    },
-    success: function(data){
-      $(".round_img").attr('src', data["src"]);
-      console.log(data["src"])
-    }
-   });
-    //  $.get("/", function(data) {
-    //     alert(data);
-    // });
+      url: "/ajax/?next=" + page.toString(),
+      dataType : "json",  
+      error:function(data){
+        console.log("ERR")
+      },
+      success: function(data){
+        var h = $("#have_adverts")
+        var nh = $("#not_have_adverts")
+        if("none" in data){
+          h.css({ 'visibility' : 'hidden'})
+          nh.css({ 'visibility' : 'visible'})
+          return
+        }
+        h.css({ 'visibility' : 'visible'})
+        nh.css({ 'visibility' : 'hidden'})
+        $(".round_img").attr('src', data["face_img"])
+        $("#text_date").html(data["date"])
+        $("#text_adress").html(data["adress"])
+        $("#text_content").html(data["content"])
+        current_page = parseInt(data["page"])
+      }
+    })
+  }
+
+  function scroll_up(){
+    next(current_page - 1)
+    //какая нибудь анимация
   }
 
 
   function scroll_down(){
-
+    next(current_page + 1)
+    //аналогично
   }
+
   $(window).bind('mousewheel DOMMouseScroll', function(event){
     if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
         scroll_up()
@@ -40,4 +54,6 @@ $(document).ready(function(){
         scroll_down()
        }
   })
- });
+
+  next(0);
+});
