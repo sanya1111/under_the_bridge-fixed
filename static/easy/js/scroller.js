@@ -18,9 +18,9 @@ $(document).ready(function(){
         h.css({ 'visibility' : 'visible'})
         nh.css({ 'visibility' : 'hidden'})
         $(".round_img").attr('src', data["face_img"])
-        $("#text_date").html(data["date"])
-        $("#text_adress").html(data["adress"])
-        $("#text_content").html(data["content"])
+        $("#text_adress").val(data["adress"])
+        $("#text_date").val(data["date"])
+        $("#text_content").val(data["content"])
         current_page = parseInt(data["page"])
       }
     })

@@ -221,3 +221,11 @@ footer .socialIcons a.twitter{background:url("img/small-twitter.png") no-repeat;
   	z-index: 6000;
 }
 
+.edit_border{
+	border: 3px solid red;
+	border-color:#088AAA;
+	border-width: medium;
+	padding:7px;
+	margin:7px;
+}
+
