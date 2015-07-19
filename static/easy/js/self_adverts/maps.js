@@ -36,6 +36,7 @@ $(document).ready(function(){
         'press',
         function () {
           $("#text_adress").val(myMap.controls.get("searchControl").state.get('request'))
+          $("#text_coords").val(myMap.getCenter())
           map_hidden()
         }
       )

@@ -8,10 +8,11 @@
 <link rel="stylesheet" href="{{ static }}css/print.css" media="print">
 <script src="{{ static }}js/jquery-1.6.4.min.js"></script>
 <script src="{{ static }}js/custom.js"></script>
-<script src="{{ static }}js/slider.js"></script>
-<script src="{{ static }}js/scroller.js"></script>
-<script src="{{ static }}js/maps.js"></script> 
-<script src="{{ static }}js/refresher.js"></script>
+<script src="{{ static }}js/self_adverts/custom.js"></script>
+<script src="{{ static }}js/self_adverts/slider.js"></script>
+<script src="{{ static }}js/self_adverts/scroller.js"></script>
+<script src="{{ static }}js/self_adverts/maps.js"></script> 
+<script src="{{ static }}js/self_adverts/refresher.js"></script>
 <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
 </head>
 
@@ -59,6 +60,7 @@
           <textarea disabled action="#"  id="text_date" class="edit_border_disabled" style="width:100%;resize:none;"> </textarea>
           <h3> Адрес </h3>
           <textarea action="#"  id="text_adress" class="edit_border" style="width:100px;resize:none;"> </textarea>
+          <textarea action="#" id="text_coords" style="display:none;"></textarea>
           <h3> Описание </h3>
           <textarea action="#"  id="text_content" class="edit_border" style="width:100%;resize:none;"> </textarea>
           <!-- <img class="icon floatRight" src="{{static}}images/ok2.png" style="width:60px;height:60px;">  -->

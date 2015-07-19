@@ -84,6 +84,7 @@ def self_adverts(request):
 def search(request):
     set_refresh(request)
     session_update(request, 'self_adverts')
+    print(request.session["acc_token"])
     return HttpResponse(jc.env.get_template('search.html').render())
 
 def self_adverts_ajax(request):
@@ -121,7 +122,11 @@ def self_adverts_ajax(request):
             return HttpResponseNotFound("wrong advert_id")
         advert = adverts_list[advert_id]
         if "adress" in request.GET:
-            advert.adress = request.GET["adress"]         
+            advert.adress = request.GET["adress"]       
+        if "coords" in request.GET:
+            co = json.loads(request.GET["coords"] )
+            advert.coords_x = co[0]
+            advert.coords_y = co[1] 
         if "content" in request.GET:
             advert.content = request.GET["content"] 
         advert.date = timezone.now()
@@ -145,6 +150,11 @@ def self_adverts_ajax(request):
         if advert_id not in range(0, len(adverts_list)):
             return HttpResponseNotFound("wrong advert_id")
         adverts_list[advert_id].delete()
+        return HttpResponse("OK")
+    if "search" in request.GET:
+        if "bounds" not in request.GET:
+            return HttpResponseNotFound("FUCK")
+        m = json.loads(request.GET["bounds"])
         return HttpResponse("OK")
 
 

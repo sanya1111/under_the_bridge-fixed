@@ -7,6 +7,9 @@ from django.utils import timezone
 class Advert(models.Model):        
     date = models.DateField()
     adress = models.CharField(max_length = 300)
+#     coords = models.CharField(max_length = 300)
+    coords_x = models.DecimalField(max_digits=30, decimal_places=5)
+    coords_y = models.DecimalField(max_digits=30, decimal_places=5)
     content = models.CharField(max_length=1000)
     im_content = models.CharField(max_length=1000)
     tags = models.CharField(max_length=1000)

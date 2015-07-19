@@ -6,7 +6,7 @@ $(document).ready(function(){
       $("#refresh_button").html(old_text)
     }, 500)
     $.ajax({
-      url: "/ajax/?update=1" + "&advert_id=" + current_page.toString() + "&adress=" + $("#text_adress").val() + "&content=" + $("#text_content").val(),
+      url: "/ajax/?update=1" + "&advert_id=" + current_page.toString() + "&adress=" + $("#text_adress").val() + "&coords=[" + $("#text_coords").val() + "]" + "&content=" + $("#text_content").val(),
       dataType : "html",  
       error:function(data){
         console.log("ERR" )
