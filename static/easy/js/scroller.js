@@ -1,6 +1,5 @@
-$(document).ready(function(){
-  var current_page = 0;
-  function next(page){
+var current_page = 0;
+function next(page){
     $.ajax({
       url: "/ajax/?next=" + page.toString(),
       dataType : "json",  
@@ -19,41 +18,61 @@ $(document).ready(function(){
         nh.css({ 'visibility' : 'hidden'})
         $(".round_img").attr('src', data["face_img"])
         $("#text_adress").val(data["adress"])
-        $("#text_date").val(data["date"])
+        $("#text_date").html(data["date"])
         $("#text_content").val(data["content"])
         current_page = parseInt(data["page"])
       }
     })
-  }
+}
 
+$(document).ready(function(){
+  var can = 1
   function scroll_up(){
-    next(current_page - 1)
+    if (can == 1){
+      next(current_page - 1)
+    }
+    
     //какая нибудь анимация
   }
 
 
   function scroll_down(){
-    next(current_page + 1)
+    if(can ==1 ){
+      next(current_page + 1)
+    }
+  
     //аналогично
   }
 
-  $(window).bind('mousewheel DOMMouseScroll', function(event){
-    if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
-        scroll_up()
-    }
-    else {
-      scroll_down()
-    }
+  $(window).bind('mousewheel DOMMouseScroll', function(event){  
+      if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
+          scroll_up()
+      }
+      else {
+        scroll_down()
+      }
+      // can = 0
+      // setTimeout(function(){
+      //   can = 1
+      // }, 2000)    
   });
 
-  $(window).keydown(function(e){
-       if(e.which == 38){
-        scroll_up()
-      }
-       if (e.which == 40){
-        scroll_down()
-       }
+  $("#up_arrow").click(function(){
+    scroll_up()
   })
+
+  $("#down_arrow").click(function(){
+    scroll_down()
+  })
+
+  // $(window).keydown(function(e){
+  //      if(e.which == 38){
+  //       scroll_up()
+  //     }
+  //      if (e.which == 40){
+  //       scroll_down()
+  //      }
+  // })
 
   next(0);
 });

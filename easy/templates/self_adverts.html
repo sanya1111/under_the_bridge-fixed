@@ -10,6 +10,9 @@
 <script src="{{ static }}js/custom.js"></script>
 <script src="{{ static }}js/slider.js"></script>
 <script src="{{ static }}js/scroller.js"></script>
+<script src="{{ static }}js/maps.js"></script> 
+<script src="{{ static }}js/refresher.js"></script>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
 </head>
 
 
@@ -37,28 +40,34 @@
 <hr>
 <!-- / #content -->
 <div id="content" >
+  <div class "wrap clearFix" id="not_have_adverts" style="text-align: center;">
+      <a><h3 class="create_new">You havent create adverts yet . Do you want create one ?</u> </a>
+  </div>
   <div class="wrap clearFix" id="have_adverts">
+   
     <div class="clearFix" style="text-align: center;">
           <div class="col">
            <img src="" alt="" class="round_img" id="slider">
-           <div class="button floatRight" style="height:25px;">Change face photo</div>
-           <div class="button floatLeft" style="height:25px;">Add Other photos</div>
+           <div class="button floatRight" style="height:25px;">Изменить главное фото</div>
+           <div class="button floatLeft" style="height:25px;">Добавить ещё фото</div >
            </div>
     </div>
     <div class="clearFix" >
-          <h3> Date </h3>
+          <h3> Дата последнего изменения</h3>
           <!-- <img class="icon" src="{{static}}images/edit.png" style="width:20px;height:20px;"> -->
-          <textarea action="#"  id="text_date" class="edit_border" style="height:20px;width:100%;"> </textarea>
-          <h3> Adress </h3>
-          <textarea action="#"  id="text_adress" class="edit_border" style="height:20px;width:100%;"> </textarea>
-          <h3> Discription </h3>
-          <textarea action="#"  id="text_content" class="edit_border" style="height:200px;width:100%;"> </textarea>
+          <!-- <p id="text" -->
+          <textarea disabled action="#"  id="text_date" class="edit_border_disabled" style="width:100%;resize:none;"> </textarea>
+          <h3> Адрес </h3>
+          <textarea action="#"  id="text_adress" class="edit_border" style="width:100px;resize:none;"> </textarea>
+          <h3> Описание </h3>
+          <textarea action="#"  id="text_content" class="edit_border" style="width:100%;resize:none;"> </textarea>
           <!-- <img class="icon floatRight" src="{{static}}images/ok2.png" style="width:60px;height:60px;">  -->
-          <div class="button floatRight" style="height:25px;">Refresh</div>
+          <div class="button floatLeft" id="remove_button" style="height:25px;">Удалить объявление</div>
+          <div class="button floatRight" id="refresh_button" style="height:25px;">Обновить объявление</div>
+          <div class="button create_new" id="create_button" style="width:100%;background:#00AAAA;opacity:0.8;top:30px;"><h3 style="text-align:center;">+</h3></div>
     </div>
-  </div>
-  <div class "wrap clearFix" id="not_have_adverts" style="text-align: center;">
-      <h3> You havent create adverts yet . Do you want create one ? </h3>
+     <img id="up_arrow" class="scroll_arrow" src="{{static}}images/up_arrow.png">
+    <img id="down_arrow" src="{{static}}images/down_arrow.png" class="scroll_arrow">
   </div>
 </div>
 <!-- footer -->
@@ -72,10 +81,7 @@
 
 <!--slider-->
 <div id='overlay_wrap'>
-  <div id='overlay'></div>
-  <img src='{{ static }}images/test.jpg' class='slider_ov' id='slider_cen'>
-  <img src='{{ static }}images/left_arrow.png' class='slider_ov' id='slider_l'>
-  <img src='{{ static }}images/right_arrow.png' class='slider_ov' id='slider_r'>
+  
 </div>
 </body>
 </html>
