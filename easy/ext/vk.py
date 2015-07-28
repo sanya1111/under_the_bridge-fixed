@@ -42,5 +42,18 @@ def exit(request):
 def is_login(request):
     return "acc_token" in request.session
 
+def get_user_img100(request):
+    data = {
+        'user_ids' : request.session["id"],
+        'fields' : 'photo_100'
+    }
+    url = "https://api.vk.com/method/users.get"
+    resp = requests.get(url, data)
+    str_cont =  resp.content.decode("utf-8") 
+    di = json.loads(str_cont)
+    if "error" in di:
+        raise Exception(di["error_msg"])
+    cur_user = di["response"][0]
+    return cur_user["photo_100"]
 
     

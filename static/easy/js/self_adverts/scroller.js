@@ -20,6 +20,7 @@ function next(page){
         $("#text_adress").val(data["adress"])
         $("#text_date").html(data["date"])
         $("#text_content").val(data["content"])
+        $("#text_coords").val(data["coords"])
         current_page = parseInt(data["page"])
       }
     })

@@ -245,3 +245,19 @@ footer .socialIcons a.twitter{background:url("img/small-twitter.png") no-repeat;
 .scroll_arrow:hover{
 	opacity: 1;
 }
+
+.back_img{
+	margin-left : 10px;
+	background-image:  url(/static/easy/images/nig.png);
+	background-size:   cover;          
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+/*.test_ws{
+
+}
+
+.test_ws:hover{
+	white-space: normal;
+}*/
