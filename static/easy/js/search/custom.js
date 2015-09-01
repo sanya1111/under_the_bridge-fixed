@@ -4,10 +4,10 @@ $(document).ready(function () {
     var w = $("#content").width()
     $("#params").css({
         'height' : content_height,
-        'width' : w * 0.3
+        'width' : w * 0.5
     })
     $("#results").css({
         'height' : content_height,
-        'width' : w * 0.69
+        'width' : w * 0.49
     })
 });

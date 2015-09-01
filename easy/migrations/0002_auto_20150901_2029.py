@@ -11,10 +11,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RemoveField(
+            model_name='human',
+            name='ad_rent',
+        ),
         migrations.AddField(
-            model_name='advert',
-            name='adress',
-            field=models.CharField(max_length=300, default='kut'),
-            preserve_default=False,
+            model_name='human',
+            name='ad_rent',
+            field=models.ManyToManyField(related_name='rent', to='easy.Advert'),
         ),
     ]

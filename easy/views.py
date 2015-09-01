@@ -14,19 +14,6 @@ jc = JinContext("easy", "templates")
 EASY_STATIC_PATH = "/static/easy/"
 jc.put_to_globals("static", EASY_STATIC_PATH)
     
-def get_human_or_create(request, id=None):
-    if id == None:
-        id = request.session.get("id")
-    try:
-        return Human.get(id)
-    except:
-        ret = Human(vk_id=id, name="")
-        ret.save()
-        return ret
-
-def get_human_adverts(request, id=None):
-    return get_human_or_create(request, id).ad_owner.all()
-
 def session_update(request, current_page):
     def refresh():
         jc.put_to_globals("login", None)
@@ -90,7 +77,7 @@ def next_ajax(request):
         next = int(request.GET["next"])
     except:
         pass
-    adverts_list = get_human_adverts(request)
+    adverts_list = Human.get_human_adverts(request)
     if len(adverts_list) == 0:
         return JsonResponse({"none" : 1})
     if next < 0:
@@ -115,7 +102,7 @@ def update_ajax(request):
         advert_id = int(request.GET["advert_id"]) 
     except:
         return HttpResponseNotFound("wrong advert_id")
-    adverts_list = get_human_adverts(request)
+    adverts_list = Human.get_human_adverts(request)
     if advert_id not in range(0, len(adverts_list)):
         return HttpResponseNotFound("wrong advert_id")
     advert = adverts_list[advert_id]
@@ -136,7 +123,7 @@ def create_ajax(request):
     new_ad = Advert(date=timezone.now())
     new_ad.coords_x, new_ad.coords_y = [59.93883244868871,30.308324582031215]
     new_ad.save()
-    human = get_human_or_create(request)
+    human = Human.get_human_or_create(request)
     human.ad_owner.add(new_ad)
     return HttpResponse("OK")
 
@@ -148,13 +135,13 @@ def remove_ajax(request):
         advert_id = int(request.GET["advert_id"]) 
     except:
         return HttpResponseNotFound("wrong advert_id")
-    adverts_list = get_human_adverts(request)
+    adverts_list = Human.get_human_adverts(request)
     if advert_id not in range(0, len(adverts_list)):
         return HttpResponseNotFound("wrong advert_id")
     adverts_list[advert_id].delete()
     return HttpResponse("OK")
 
-def search_ajax(request):
+def search_ajax_adv(request):
     if "bounds" not in request.GET:
         return HttpResponseNotFound("FUCK")
     page = 0
@@ -180,6 +167,44 @@ def search_ajax(request):
     rett["response"] = ret
     return JsonResponse(rett)
 
+def search_ajax_people(request):
+    def between(x, wi, x2):
+        return x <= wi and wi <= x2
+    if "bounds" not in request.GET:
+        return HttpResponseNotFound("FUCK")
+    page = 0
+    PAGE_LIMIT = 5
+    if "page" in request.GET:
+        try:
+            page = int(request.GET["page"])
+        except:
+            pass
+    bounds = json.loads(request.GET["bounds"])
+    filtered = []
+    for obj in Human.objects.all():
+        obj_coords = obj.get_coords_list()
+        for area in obj_coords:
+            if (between(bounds[0], area[0], bounds[2]) or between(bounds[0], area[2], bounds[2])) and (between(bounds[1], area[1], bounds[3]) or between(bounds[1], area[3], bounds[3])):
+                filtered.append(obj)
+                break
+        if filtered.count > PAGE_LIMIT * (page + 1):
+            break
+#     rett = {"next" : (filtered.count() > (page + 1) * PAGE_LIMIT), "prev" : (page > 0)}
+#     filtered = filtered[page * PAGE_LIMIT : (page + 1) * PAGE_LIMIT]
+#     ret = []
+#     for obj in filtered.all():
+#         ret_obj = {}
+#         ret_obj["coords"] = (obj.coords_x, obj.coords_y)
+#         ret_obj["face_img"] = os.path.join(EASY_STATIC_PATH, obj.im_content)
+#         ret_obj["user_img"] = vk.get_user_img100(request)
+#         ret_obj["adress"] = obj.adress
+#         ret_obj["content"] = obj.content
+#         ret.append(ret_obj)
+#     rett["response"] = ret
+#     return JsonResponse(rett)
+    return None
+
+
 def ajax(request):
     if "next" in request.GET:
         return next_ajax(request)
@@ -190,7 +215,7 @@ def ajax(request):
     if "remove" in request.GET:
         return remove_ajax(request)
     if "search" in request.GET:
-        return search_ajax(request)
+        return search_ajax_adv(request)
         
             
             
