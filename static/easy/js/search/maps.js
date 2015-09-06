@@ -14,8 +14,9 @@ $(document).ready(function(){
   function refresh_objects(){
     var m_bounds = myMap.getBounds()
       // alert(m_bounds)
+        var url =  "/ajax/?search=1" + "&bounds=[" + m_bounds.toString() + "]" + "&page=" + current_page.toString()
        $.ajax({
-        url: "/ajax/?search=1" + "&bounds=[" + m_bounds.toString() + "]" + "&page=" + current_page.toString(),
+        url: "/ajax/?search=1" + "&bounds=[" + m_bounds.toString() + "]" + "&page=" + current_page.toString() + "&type=" + document.search_type.toString(),
         dataType : "json",  
         error:function(data){
           console.log("ERR")

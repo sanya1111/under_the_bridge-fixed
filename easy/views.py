@@ -4,7 +4,6 @@ import os
 import json
 from .ext import vk 
 from django.template.context_processors import request
-import http
 from django.http.response import Http404
 from .models import Advert, Human
 from django.utils import timezone
@@ -71,6 +70,11 @@ def search(request):
     print(request.session["acc_token"])
     return HttpResponse(jc.env.get_template('search.html').render())
 
+def search_people(request):
+    set_refresh(request)
+    session_update(request, 'self_adverts')
+    return HttpResponse(jc.env.get_template('search_people.html').render())
+    
 def next_ajax(request):
     next = 0
     try :
@@ -85,11 +89,7 @@ def next_ajax(request):
     if next >= len(adverts_list):
         next = 0    
     item =  adverts_list[next] 
-    ret = {}
-    ret["date"] = item.date
-    ret["adress"] = item.adress
-    ret["coords"] = (item.coords_x, item.coords_y) 
-    ret["content"] = item.content
+    ret = item.json_output()
     ret["face_img"] = os.path.join(EASY_STATIC_PATH, item.im_content)
     ret["page"] = next
     return JsonResponse(ret)
@@ -142,8 +142,12 @@ def remove_ajax(request):
     return HttpResponse("OK")
 
 def search_ajax_adv(request):
+    rett = {}
+    human = Human.get_human_or_create(request)
+    if "incomings" in request.GET:
+        rett["incomings"] = (len(human.get_coords_list()) > 0)
     if "bounds" not in request.GET:
-        return HttpResponseNotFound("FUCK")
+        return JsonResponse(rett)
     page = 0
     PAGE_LIMIT = 5
     if "page" in request.GET:
@@ -153,16 +157,13 @@ def search_ajax_adv(request):
             pass
     bounds = json.loads(request.GET["bounds"])
     filtered = Advert.objects.filter(coords_x__range=(bounds[0], bounds[2]), coords_y__range=(bounds[1], bounds[3]))
-    rett = {"next" : (filtered.count() > (page + 1) * PAGE_LIMIT), "prev" : (page > 0)}
+    rett.update({"next" : (filtered.count() > (page + 1) * PAGE_LIMIT), "prev" : (page > 0)})
     filtered = filtered[page * PAGE_LIMIT : (page + 1) * PAGE_LIMIT]
     ret = []
     for obj in filtered.all():
-        ret_obj = {}
-        ret_obj["coords"] = (obj.coords_x, obj.coords_y)
+        ret_obj = obj.json_output()
         ret_obj["face_img"] = os.path.join(EASY_STATIC_PATH, obj.im_content)
         ret_obj["user_img"] = vk.get_user_img100(request)
-        ret_obj["adress"] = obj.adress
-        ret_obj["content"] = obj.content
         ret.append(ret_obj)
     rett["response"] = ret
     return JsonResponse(rett)
@@ -170,25 +171,28 @@ def search_ajax_adv(request):
 def search_ajax_people(request):
     def between(x, wi, x2):
         return x <= wi and wi <= x2
-    if "bounds" not in request.GET:
-        return HttpResponseNotFound("FUCK")
-    page = 0
-    PAGE_LIMIT = 5
-    if "page" in request.GET:
-        try:
-            page = int(request.GET["page"])
-        except:
-            pass
-    bounds = json.loads(request.GET["bounds"])
-    filtered = []
-    for obj in Human.objects.all():
-        obj_coords = obj.get_coords_list()
-        for area in obj_coords:
-            if (between(bounds[0], area[0], bounds[2]) or between(bounds[0], area[2], bounds[2])) and (between(bounds[1], area[1], bounds[3]) or between(bounds[1], area[3], bounds[3])):
-                filtered.append(obj)
-                break
-        if filtered.count > PAGE_LIMIT * (page + 1):
-            break
+    ret = {}
+    
+#     
+#     if "bounds" not in request.GET:
+#         return HttpResponseNotFound("FUCK")
+#     page = 0
+#     PAGE_LIMIT = 5
+#     if "page" in request.GET:
+#         try:
+#             page = int(request.GET["page"])
+#         except:
+#             pass
+#     bounds = json.loads(request.GET["bounds"])
+#     filtered = []
+#     for obj in Human.objects.all():
+#         obj_coords = obj.get_coords_list()
+#         for area in obj_coords:
+#             if (between(bounds[0], area[0], bounds[2]) or between(bounds[0], area[2], bounds[2])) and (between(bounds[1], area[1], bounds[3]) or between(bounds[1], area[3], bounds[3])):
+#                 filtered.append(obj)
+#                 break
+#         if filtered.count > PAGE_LIMIT * (page + 1):
+#             break
 #     rett = {"next" : (filtered.count() > (page + 1) * PAGE_LIMIT), "prev" : (page > 0)}
 #     filtered = filtered[page * PAGE_LIMIT : (page + 1) * PAGE_LIMIT]
 #     ret = []
@@ -202,7 +206,7 @@ def search_ajax_people(request):
 #         ret.append(ret_obj)
 #     rett["response"] = ret
 #     return JsonResponse(rett)
-    return None
+    return JsonResponse(ret)
 
 
 def ajax(request):

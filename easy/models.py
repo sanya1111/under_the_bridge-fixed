@@ -16,6 +16,14 @@ class Advert(models.Model):
     im_content = models.CharField(max_length=1000)
     tags = models.CharField(max_length=1000)
     
+    def json_output(self):
+        ret = {}   
+        ret["date"] = self.date
+        ret["adress"] = self.adress
+        ret["coords"] = (self.coords_x, self.coords_y) 
+        ret["content"] = self.content
+        return ret
+    
 class Human(models.Model):     
     def get(id):
         result = Human.objects.filter(vk_id=id)

@@ -12,27 +12,7 @@
 
 
 <body>
-<header class="clearFix">
-  <div class="wrap"> 
-  	<a id="logo" href="#">Under the bridge</a>
-    <hr>
-    <nav>
-      <div id="nav"> 
-        <ul>
-          <li> <a href="#">Поиск</a> </li>
-          <li> <a href="#">Контакты</a> </li>
-          {% if login %}
-          <li> <a href="/self_adverts">Мои объявления</a> </li>
-           <li> <a href="/?refresh=1">R</a> </li>
-          <li> <a href="#">{{ first_name }} {{ last_name }}</a> </li>
-		  <li> <a href="/?exit=1">Выйти</a> </li>
-		  {% endif %}
-        </ul>
-      </div>
-    </nav>
-  </div>
-</header>
-<hr>
+{% include 'header.html' %}
 
 <div id="intro">
   <div class="inner">
