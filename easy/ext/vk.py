@@ -22,7 +22,7 @@ def login(request, redirect_page):
             'client_id' : '4985824',
             'client_secret' : 'wrXxFjwL2FglPPazzq0p',
             'code' : request.GET["code"],
-            'redirect_uri' : 'http://test.com/' + redirect_page,
+            'redirect_uri' : 'http://107.182.225.22/' + redirect_page,
     }
     url = 'https://oauth.vk.com/access_token'
     resp = requests.get(url, data)

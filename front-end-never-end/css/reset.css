@@ -1,0 +1,21 @@
+
+*{margin:0; padding:0;}
+body, div, span, p, a, img, ul, ol, li, table, th, tr, td, form, fieldset, legend, dl, dt, dd, blockquote, applet, object{border:0;}
+address, article, aside, figcaption, figure, footer, header, hgroup, nav, section{display:block; margin:0; padding:0;}
+ul, ol{list-style-type:none;}
+hr{display:none;}
+small{font-size:0.9em;}
+.floatLeft{float:left !important;}
+.floatCenter{float:none !important;}
+.floatRight{float:right !important;}
+.bold{font-weight:bold !important;}
+.small{font-size:0.9em !important;}
+.large{font-size:1.1em !important;}
+.italic{font-style:italic !important;}
+.alignRight{text-align:right !important;}
+.alignCenter{text-align:center !important;}
+.alignJustify{text-align:justify !important;}
+
+/* clearfix */
+.clearFix:after{content:"."; display:block; height:0; clear:both; visibility:hidden;}
+.clearFix{display:block;}
